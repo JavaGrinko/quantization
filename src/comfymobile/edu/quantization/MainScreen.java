@@ -190,37 +190,8 @@ public class MainScreen extends Activity implements SurfaceHolder.Callback, View
     }
 
     private void uploadImage(byte[] imageData) {
-        /*Size previewSize = camera.getParameters().getPreviewSize();
-        float aspect = (float) previewSize.width / previewSize.height;
-        int previewFormat = camera.getParameters().getPreviewFormat();
-        int previewSurfaceWidth = preview.getWidth();
-        int previewSurfaceHeight = preview.getHeight();
-        YuvImage yuvImage = new YuvImage(imageData, previewFormat, previewSurfaceWidth, previewSurfaceHeight,null); */
-        String fileName = "IMG_"
-                + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
-                .toString() + ".jpg";
-        File sdRoot = Environment.getExternalStorageDirectory();
-        String dir = "/Camera/";
-        File mkDir = new File(sdRoot, dir);
-        if (!mkDir.exists())
-            mkDir.mkdirs();
-        File pictureFile = new File(sdRoot, dir + fileName);
-        if (!pictureFile.exists()) {
-            try {
-                pictureFile.createNewFile();
-                Camera.Parameters parameters = camera.getParameters();
-                Size size = parameters.getPreviewSize();
-                YuvImage image = new YuvImage(imageData,
-                        parameters.getPreviewFormat(), size.width, size.height,
-                        null);
-                FileOutputStream filecon = new FileOutputStream(pictureFile);
-                image.compressToJpeg(
-                        new Rect(0, 0, image.getWidth(), image.getHeight()),
-                        90, filecon);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        Camera.Parameters parameters = camera.getParameters();
+        Size size = parameters.getPreviewSize();
+        YuvImage image = new YuvImage(imageData,parameters.getPreviewFormat(), size.width, size.height, null);
     }
 }
