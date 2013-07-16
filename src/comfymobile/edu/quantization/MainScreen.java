@@ -16,7 +16,9 @@ import android.view.View;
 
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class MainScreen extends Activity implements SurfaceHolder.Callback, View
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
     private Button shotBtn;
+    private ImageView iv;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -58,6 +61,10 @@ public class MainScreen extends Activity implements SurfaceHolder.Callback, View
         shotBtn.setText("Shot");
         shotBtn.setOnClickListener(this);
     }
+
+   void initUI(){
+       iv = (ImageView) findViewById(R.id.imageView);
+   }
 
     @Override
     protected void onResume()
@@ -192,6 +199,11 @@ public class MainScreen extends Activity implements SurfaceHolder.Callback, View
     private void uploadImage(byte[] imageData) {
         Camera.Parameters parameters = camera.getParameters();
         Size size = parameters.getPreviewSize();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         YuvImage image = new YuvImage(imageData,parameters.getPreviewFormat(), size.width, size.height, null);
+        image.compressToJpeg(new Rect(0, 0, size.width, size.height), 50, out);
+        byte[] bitmapdata = out.toByteArray();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+        iv.setImageBitmap(bitmap);
     }
 }
